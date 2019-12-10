@@ -1,92 +1,50 @@
 import React, { useState } from 'react';
-
 import { makeStyles } from '@material-ui/core/styles';
-
 import Typography from '@material-ui/core/Typography';
-
 import Slider from '@material-ui/core/Slider';
-
 import Grid from '@material-ui/core/Grid';
-
 import Card from '@material-ui/core/Button';
-
 import Paper from '@material-ui/core/Paper';
-
 import CardMedia from '@material-ui/core/CardMedia';
-
 import CardActions from '@material-ui/core/CardActions';
-
 import Fab from '@material-ui/core/Fab';
-
 import Remove from '@material-ui/icons/Remove';
-
 import Add from '@material-ui/icons/Add';
 
- 
-
 const useStyles = makeStyles(theme => ({
-
   root: { flexGrow: 1 },
-
   margin: { height: theme.spacing(3), },
-
   slider: { margin: 10, width: '96%', },
-
   buttonGroup: { marginTop: 30 },
-
   media: { height: 140, width: 150 },
-
   card: { maxWidth: 345, display: 'flex' },
-
   paper: {
-
     padding: theme.spacing(2),
-
     textAlign: 'center',
-
     color: theme.palette.text.secondary,
-
   },
-
 }));
 
- 
+
 
 export default function DiscreteSlider() {
-
   const classes = useStyles();
-
   const [count, setCount] = useState(0);
-
   const [step, setStep] = useState(0);
 
- 
 
   const marks = [
-
     { value: 0, label: ':(' },
-
     { value: 20, label: 'hands' },
-
     { value: 37, label: 'arms' },
-
     { value: 65, label: 'legs' },
-
     { value: 85, label: 'feets' },
-
     { value: 90, label: 'back' },
-
     { value: 100, label: 'YOU DIED' },
-
   ];
 
- 
-
   const systemPoints = [
-
     { id: 0, name: "brushing teeth", points: 10, image: "https://st2.depositphotos.com/3440865/9827/v/950/depositphotos_98279962-stock-illustration-happy-boy-love-brushing-teeth.jpg" },
-
-    { id: 1, name: "shower", points: 20, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ6a2OU-34If7kwdwSlpugLwT9monel_A50dBK3V4dkd8dgzUKs" },
 
     { id: 2, name: "wash dishes", points: 10, image: "https://media.istockphoto.com/vectors/man-washes-dishes-vector-id512883100?k=6&m=512883100&s=612x612&w=0&h=uCFFodqczw3tLIRM_c5Y1pJB2cPUInV2gPVbsWSEnyo=" },
 
@@ -102,136 +60,71 @@ export default function DiscreteSlider() {
 
   ];
 
- 
-
   const addPoints = points => {
-
     if (count === 100) return;
-
     const sum = count + points;
-
     setCount(sum);
-
     setStep(points)
-
   }
 
   const removePoints = points => {
-
     if (count === 0) return;
-
     const remove = count - points;
-
     setCount(remove);
-
     setStep(points)
-
   }
 
- 
-
   return (
-
     <div className={classes.root}>
-
       <div className={classes.margin} />
-
       <Typography id="discrete-slider-always" gutterBottom>
-
         SOBO O NO SOBO
-
       </Typography>
-
       <Slider
-
         className={classes.slider}
-
         defaultValue={count}
-
         value={count}
-
         aria-labelledby="discrete-slider-always"
-
         step={step}
-
         marks={marks}
-
         valueLabelDisplay="on"
-
       />
+      <Paper
+        color="secondary"
+        size="large"
+        className={classes.paper}
+        className={classes.buttonGroup} >
+        {systemPoints.map(data => (
+          <Grid color="secondary" container spacing={3}>
+            <Grid item xs={6}>
+              <Card className={classes.paper} key={data.id} color="secondary">
+                <CardMedia
+                  className={classes.media}
+                  image={data.image}
+                  title="Contemplative Reptile"
+                >
+                </CardMedia>
 
-      {/* <Grid> */}
+                <Typography id="discrete-slider-always">
+                  {data.name}
+                </Typography>
+                <CardActions>
+                  <Fab size="small" color="secondary" aria-label="remove"
+                    onClick={() => removePoints(data.points)} >
+                    <Remove />
+                  </Fab>
 
-        <Paper
-
-          color="secondary"
-
-          size="large"
-
-          className={classes.paper}
-
-          className={classes.buttonGroup} >
-
-          {systemPoints.map(data => (
-
-            <Grid color="secondary" container spacing={3}>
-
-              <Grid item xs={6}>
-
-                <Card className={classes.paper} key={data.id} color="secondary">
-
-                  <CardMedia
-
-                    className={classes.media}
-
-                    image={data.image}
-
-                    title="Contemplative Reptile"
-
-                  >
-
-                  </CardMedia>
-
-                  <Typography id="discrete-slider-always">
-
-                    {data.name}
-
-                  </Typography>
-
-                  <CardActions>
-
-                    <Fab size="small" color="secondary" aria-label="remove"
-
-                      onClick={() => removePoints(data.points)} >
-
-                      <Remove />
-
-                    </Fab>
-
-                    <Fab size="small" color="secondary" aria-label="add"
-
-                      onClick={() => addPoints(data.points)}>
-
-                      <Add />
-
-                    </Fab>
-
-                  </CardActions>
-
-                </Card>
-
-              </Grid>
-
+                  <Fab size="small" color="secondary" aria-label="add"
+                    onClick={() => addPoints(data.points)}>
+                    <Add />
+                  </Fab>
+                </CardActions>
+              </Card>
             </Grid>
-
-          ))}
-
-        </Paper>
-
+          </Grid>
+        ))}
+      </Paper>
       {/* </Grid> */}
-
     </div >
-
   );
-
 }
