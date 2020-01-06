@@ -43,7 +43,6 @@ export default function DiscreteSlider() {
   const [dataBase, setDataBase] = React.useState([]);
   const [count, setCount] = useState({ id: null, count: 0 });
   const [step, setStep] = useState(0);
-  const [total, setTotal] = useState(0);
 
 
   const marks = [
@@ -74,6 +73,7 @@ export default function DiscreteSlider() {
     };
 
 
+
     firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
@@ -92,7 +92,7 @@ export default function DiscreteSlider() {
       .then(db => {
         db.forEach(data => {
           console.log(data.data())
-          setCount({ id: data.id, count: total + data.data().total });
+          setCount({ id: data.id, count: data.data().total });
         })
       })
   }, [])
@@ -101,15 +101,15 @@ export default function DiscreteSlider() {
   const addPoints = data => {
     let sum = count.count + data.data.points;
     console.log(sum)
-    if (count.count >= 100) {
-      sum = 100
-      firebase.firestore().collection('total_points').doc(count.id).update({
-        total: sum
-      })
-    } else {
+    if (count.count > 100) {
       firebase.firestore().collection('total_points').doc(count.id).update({
         total: 100
       })
+    } else {
+      firebase.firestore().collection('total_points').doc(count.id).update({
+        total: sum
+      })
+
     }
     setCount({ id: count.id, count: sum });
     setStep(data.data.points);
@@ -117,13 +117,12 @@ export default function DiscreteSlider() {
 
   const removePoints = data => {
     let rest = count.count - data.data.points;
-    console.log(rest)
-    if (count.count <= -100) {
-      rest = -100
+    if (count.count >= -100) {
       firebase.firestore().collection('total_points').doc(count.id).update({
         total: rest
       })
     } else {
+      console.log('always -100')
       firebase.firestore().collection('total_points').doc(count.id).update({
         total: -100
       })
